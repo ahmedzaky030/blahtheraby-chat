@@ -2,7 +2,7 @@ var express = require('express');
 
 var router = express.Router();
 var app = express();
-var http = require('http').createServer(app);
+var http = require('https').createServer(app);
 var io = require('socket.io')(http);
 var path = require('path');
 var servStatic = require('serve-static');
