@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var randomText = require('randomstring');
 var roomsHandler = require('./chatRabbit/roomsHandler.js');
-
+var port = process.env.PORT || 3000;
 
 
 var talkersCount = 0;
@@ -125,6 +125,6 @@ router.get('/', function (req, res) {
 
 
 
-http.listen(3000, function () {
+http.listen(port, function () {
     console.log("Server started ......");
 })
