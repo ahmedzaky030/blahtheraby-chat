@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Blah Theraby</title>
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+    <h1>Welcome to Blah theraby website</h1>
+    Enter chat as :
+    <div id="choices">
+        <button id="listen" class="btn btn-primary"> Listener </button>
+        <button id="talk" class="btn btn-danger"> Talker </button>
+    </div>
+    <div class="hidden" id="chat">
+        <div id="messages">
+            s
+        </div>
+        <div>
+            <input id="message" type="text" placeholder="send your message here" />
+            <input id="send" type="button" value="Send Message" />
+
+        </div>
+        <input id="roomName" type="hidden" />
+        <input id="type" type="hidden" />
+
+    </div>
+
+    <script src="/jquery/dist/jquery.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/js/scriptchat.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:3000');
+        socket.on('connect', function (data) {
+            
+
+            socket.on('roomJoined' , function(data){
+                $("#roomName").val(data.roomName);
+                if(data.fullRoom){
+                    console.log('Now you can start with your partner');
+                } else {
+                    console.log('Please wait until someone enter the room');
+                }
+            });
+
+            socket.on("chat", function(data){
+                $("#messages").append("<span>"+data.message+"</span><br/>")
+            })
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#send").click(function(){
+                
+                var message = document.getElementById('message').value;
+                var roomName = document.getElementById('roomName').value;
+                var data = {"roomName":roomName , "message":message};
+                if(message != null && message.length > 0){
+                    socket.emit('chat',data);
+                }
+            })
+            
+            
+            $("#listen").click(function () {                
+                var data = {
+                    "type": "listener"
+                };
+
+                socket.emit('join', data);
+                $("#choices").addClass("hidden");
+                $("#chat").removeClass("hidden");                           
+
+            });
+
+            $("#talk").click(function () {
+                $('#type').val('talk');
+                var data = {
+                    "type": "talker"
+                };
+
+                socket.emit('join', data);
+                $("#choices").addClass("hidden");
+                $("#chat").removeClass("hidden");                
+            })
+        })
+    </script>
+
+
+</body>
+
+</html>

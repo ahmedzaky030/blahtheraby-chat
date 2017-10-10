@@ -1,0 +1,28 @@
+{
+  "name": "blahtherapy",
+  "version": "1.0.0",
+  "description": "chat app help anonymous users talks together",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqp": "^0.2.6",
+    "amqplib": "^0.5.1",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "ejs": "^2.5.7",
+    "express": "^4.16.1",
+    "path": "^0.12.7",
+    "randomstring": "^1.1.5",
+    "redis": "^2.8.0",
+    "serve-static": "^1.13.1",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "bower": "^1.8.2"
+  }
+}
