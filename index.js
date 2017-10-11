@@ -51,13 +51,15 @@ io.on('connection', function (client) {
     
 
     client.on('join', function (data) {
-        var roomData = roomsHandler(client.id , data.type);
+        var roomData = roomsHandler.getRoomName(client.id , data.type);
+        roomData.countData = roomsHandler.getCount();
         if(roomData.roomName != 'xxx') {
             client.join(roomData.roomName).emit('roomJoined' , roomData);
         }        
     });
 
     client.on("chat" , function(data){
+        data.countData = roomsHandler.getCount();
         io.to(data.roomName).emit('chat' , data);
     });
 

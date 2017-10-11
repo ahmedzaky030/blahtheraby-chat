@@ -3,6 +3,10 @@ var listenersCount = 0;
 var rooms = [];
 var ss = "";
 
+var getListenersOrTalkersCount = function() {
+    var data = {"listeners":listenersCount , "talkers":talkersCount};
+    return data;
+}
 
 var getRoomName = function (clientId, type) {
     var fullRoom = false;
@@ -56,4 +60,4 @@ var getRoomName = function (clientId, type) {
     return roomData;
 };
 
-module.exports = getRoomName;
+module.exports = { getRoomName: getRoomName , getCount:getListenersOrTalkersCount };
