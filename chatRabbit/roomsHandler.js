@@ -2,16 +2,36 @@ var talkersCount = 0;
 var listenersCount = 0;
 var rooms = [];
 var ss = "";
+var talkersArr = [];
+var listenersArr = [];
 
 var getListenersOrTalkersCount = function() {
     var data = {"listeners":listenersCount , "talkers":talkersCount};
     return data;
 }
 
+var decreaseCount= function( clientId){
+
+    if(listenersArr.indexOf(clientId) != -1 ){
+        var index = listenersArr.indexOf(clientId);
+        listenersArr.splice(index, 1);
+        listenersCount--;    
+    }
+
+    if(talkersArr.indexOf(clientId) != -1 ){
+        var index = talkersArr.indexOf(clientId);
+        talkersArr.splice(index, 1);
+        talkersCount--;    
+    }   
+}
+
+
+
 var getRoomName = function (clientId, type) {
     var fullRoom = false;
     if (type === 'listener') {
         listenersCount++;
+        listenersArr.push(clientId);
         var roomName = "";
         if (listenersCount === talkersCount) {
             roomName = rooms[talkersCount - 1];
@@ -33,6 +53,7 @@ var getRoomName = function (clientId, type) {
         return roomData;
     } else if (type === 'talker') {
         talkersCount++;
+        talkersArr.push(clientId);
         var roomName = '';
         if (listenersCount === talkersCount) {
             roomName = rooms[talkersCount - 1];
@@ -42,7 +63,7 @@ var getRoomName = function (clientId, type) {
             roomName = rooms[talkersCount - 1];
             fullRoom = true;
         } else {
-            roomName = randomText.generate(7);
+            roomName = clientId.slice(0, 6);
             rooms.push(roomName);
             fullRoom = false;
         }
@@ -60,4 +81,4 @@ var getRoomName = function (clientId, type) {
     return roomData;
 };
 
-module.exports = { getRoomName: getRoomName , getCount:getListenersOrTalkersCount };
+module.exports = { getRoomName: getRoomName , getCount:getListenersOrTalkersCount , decreaseCount:decreaseCount };

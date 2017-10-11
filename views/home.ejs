@@ -65,10 +65,15 @@
             });
 
             socket.on("chat", function(data){
+               console.log( $("#type").val());
                 $("#messages").append("<span>"+data.message+"</span><br/>");
                 $("#count").html(" <b>Listeners :</b>"+data.countData.listeners +" , <b>Talkers :</b>"+data.countData.talkers);
                 $("#warn").text('Now you can start with your partner').css("color","green");
             })
+
+            
+
+            
         });
     </script>
     <script>
@@ -88,6 +93,7 @@
             
             
             $("#listen").click(function () {                
+                $('#type').val('listen');
                 var data = {
                     "type": "listener"
                 };
