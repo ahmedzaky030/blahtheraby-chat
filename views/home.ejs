@@ -13,22 +13,25 @@
     <div id="choices">
         <button id="listen" class="btn btn-primary"> Chat as a Listener </button>
         <button id="talk" class="btn btn-danger">Chat as a Talker </button>
-        
+
     </div>
-    <b>You're in room : <span id="roomName"></span></b>
-    <span id="warn"></span><br/>
+    <b>You're in room :
+        <span id="roomName"></span>
+    </b>
+    <span id="warn"></span>
+    <br/>
     <span id="count"></span>
-    
+
     <div class="hidden" id="chat">
         <div id="messages">
-            
+
         </div>
         <div>
             <input id="message" type="text" placeholder="send your message here" />
             <input id="send" type="button" value="Send Message" />
 
         </div>
-        
+
         <input id="type" type="hidden" />
 
     </div>
@@ -40,59 +43,58 @@
     <script>
         //http://localhost:3000
         //https://blahtherapy-chat.herokuapp.com
-        var socket = io.connect('https://blahtherapy-chat.herokuapp.com');
+        var socket = io.connect('http://localhost:3000');
         socket.on('connect', function (data) {
-            
 
-            socket.on('roomJoined' , function(data){
-                
-              //if($("#count").val() == null){
-                $("#count").html(" <b>Listeners :</b>"+data.countData.listeners+" , <b>Talkers :</b>"+data.countData.talkers);
+
+            socket.on('roomJoined', function (data) {
+                //if($("#count").val() == null){
+                $("#count").html(" <b>Listeners :</b>" + data.countData.listeners +
+                    " , <b>Talkers :</b>" + data.countData.talkers);
                 //}
 
                 $("#roomName").text(data.roomName);
-                if(data.fullRoom){
+                if (data.fullRoom) {
                     console.log($("#choices span").text());
-                    $("#warn").text('Now you can start with your partner').css("color","green");
-                    console.log('Now you can start with your partner');
-                    console.log($("#choices span").text());
-                } else {
-                    $("#warn").text('Please wait until someone enter the room').css("color","orange");
+                    $("#warn").text('Now you can start with your partner').css("color", "green");
 
-                    console.log('Please wait until someone enter the room');
-                    console.log($("#choices span").text());
+                } else {
+                    $("#warn").text('Please wait until someone enter the room').css("color", "orange");
                 }
             });
 
-            socket.on("chat", function(data){
-               console.log( $("#type").val());
-                $("#messages").append("<span>"+data.message+"</span><br/>");
-                $("#count").html(" <b>Listeners :</b>"+data.countData.listeners +" , <b>Talkers :</b>"+data.countData.talkers);
-                $("#warn").text('Now you can start with your partner').css("color","green");
+            socket.on("chat", function (data) {
+                $("#messages").append("<span>" + data.message + "</span><br/>");
+                $("#count").html(" <b>Listeners :</b>" + data.countData.listeners +
+                    " , <b>Talkers :</b>" + data.countData.talkers);
+                $("#warn").text('Now you can start with your partner').css("color", "green");
             })
 
-            
 
-            
+
+
         });
     </script>
     <script>
         $(document).ready(function () {
-            $("#send").click(function(){
-                
+            $("#send").click(function () {
+
                 var message = document.getElementById('message').value;
                 var roomName = $('#roomName').text();
-                
-                var data = {"roomName":roomName , "message":message};
-                if(message != null && message.length > 0){
+
+                var data = {
+                    "roomName": roomName,
+                    "message": message
+                };
+                if (message != null && message.length > 0) {
                     debugger;
-                    socket.emit('chat',data);
+                    socket.emit('chat', data);
                     $('#message').val(null);
                 }
             })
-            
-            
-            $("#listen").click(function () {                
+
+
+            $("#listen").click(function () {
                 $('#type').val('listen');
                 var data = {
                     "type": "listener"
@@ -100,7 +102,7 @@
 
                 socket.emit('join', data);
                 $("#choices").addClass("hidden");
-                $("#chat").removeClass("hidden");                           
+                $("#chat").removeClass("hidden");
 
             });
 
@@ -112,7 +114,7 @@
 
                 socket.emit('join', data);
                 $("#choices").addClass("hidden");
-                $("#chat").removeClass("hidden");                
+                $("#chat").removeClass("hidden");
             })
         })
     </script>

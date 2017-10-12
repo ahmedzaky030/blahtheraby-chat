@@ -29,7 +29,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 app.use(servStatic(path.join(__dirname, 'views')));
 app.use(servStatic(path.join(__dirname, 'public')));
-app.use(servStatic(path.join(__dirname, 'node_modules'))); 
+app.use(servStatic(path.join(__dirname, 'node_modules')));
 
 router.get('/listen', function (req, res) {
     res.send('Hello' + listenersCount + ' Listeners');
@@ -48,27 +48,28 @@ router.get('/listen', function (req, res) {
 
 io.on('connection', function (client) {
     console.log('Client connected...');
-    
+
 
     client.on('join', function (data) {
-        var roomData = roomsHandler.getRoomName(client.id , data.type);
+        var roomData = roomsHandler.getRoomName(client.id, data.type);
         roomData.countData = roomsHandler.getCount();
-        if(roomData.roomName != 'xxx') {
-            client.join(roomData.roomName).emit('roomJoined' , roomData);
-        }        
+
+        if (roomData.roomName != 'xxx') {
+            client.join(roomData.roomName).emit('roomJoined', roomData);
+        }
     });
 
-    client.on("chat" , function(data){
+    client.on("chat", function (data) {
         data.countData = roomsHandler.getCount();
-        io.to(data.roomName).emit('chat' , data);
+        io.to(data.roomName).emit('chat', data);
     });
-    
-    client.on("disconnect", function(data){
+
+    client.on("disconnect", function (data) {
         roomsHandler.decreaseCount(client.id);
         client.disconnect();
     });
-    
-    
+
+
 })
 
 
