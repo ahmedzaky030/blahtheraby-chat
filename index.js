@@ -34,17 +34,6 @@ app.use(servStatic(path.join(__dirname, 'node_modules')));
 router.get('/listen', function (req, res) {
     res.send('Hello' + listenersCount + ' Listeners');
 });
-// router.post('/listen/send/:roomName', function (req, res) {
-//     var message = req.body.message;
-//     var roomName = req.params.roomName;
-//     var cl = new client();
-//     cl.send(roomName, message);
-//     var receivedMessage = cl.receive(roomName);
-
-//     res.json(receivedMessage);
-
-
-// })
 
 io.on('connection', function (client) {
     console.log('Client connected...');
